@@ -1035,7 +1035,7 @@ function App() {
       </main>
       <footer>
         <a
-          href="https://frederick1824.vercel.app/"
+          href="https://ftk-lab.vercel.app/"
           target="_blank"
           rel="noopener noreferrer"
         >
