@@ -13,8 +13,20 @@ import {
   Calculator,
   ClipboardList,
   ChevronDown,
+  Maximize2,
+  RotateCcw,
+  ZoomIn,
+  ZoomOut,
+  X,
 } from "lucide-react";
 import "./style.css";
+type Poster = {
+  id: string;
+  title: string;
+  src: string;
+  filename: string;
+  description: string;
+};
 type Case = {
   id: number;
   name: string;
@@ -58,6 +70,24 @@ const presets: Case[] = [
     name: "Caso G · Familiar",
     family: true,
     holderTenure: 8,
+  },
+];
+const posters: Poster[] = [
+  {
+    id: "abp",
+    title: "PÓSTER 01 | VERSIÓN ABP",
+    src: "/gym-manager-ABP.jpeg",
+    filename: "gym-manager-ABP.jpeg",
+    description:
+      "Póster académico original del proyecto, elaborado siguiendo la estructura del Aprendizaje Basado en Proyectos.",
+  },
+  {
+    id: "academico",
+    title: "PÓSTER 02 | VERSIÓN ACADÉMICA MEJORADA",
+    src: "/gym-manager-FTK.png",
+    filename: "gym-manager-FTK.png",
+    description:
+      "Presentación visual renovada de los contenidos, objetivos, fundamentos y resultados del proyecto.",
   },
 ];
 const prices: Record<number, number> = { 3: 12000, 5: 24000, 30: 50000 };
@@ -116,6 +146,8 @@ function evaluate(c: Case) {
 function App() {
   const [showWelcome, setShowWelcome] = useState(true);
   const [tab, setTab] = useState("inicio");
+  const [selectedPoster, setSelectedPoster] = useState<Poster | null>(null);
+  const [posterZoom, setPosterZoom] = useState(1);
   const [c, setC] = useState<Case>(example);
   const [expanded, setExpanded] = useState<string[]>([]);
   const [records, setRecords] = useState<
@@ -154,6 +186,30 @@ function App() {
     () => localStorage.setItem("gym-records", JSON.stringify(records)),
     [records],
   );
+  useEffect(() => {
+    if (!selectedPoster) return;
+    const scrollPosition = window.scrollY;
+    const previousOverflow = document.body.style.overflow;
+    const previousPosition = document.body.style.position;
+    const previousTop = document.body.style.top;
+    const previousWidth = document.body.style.width;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelectedPoster(null);
+    };
+    document.body.style.overflow = "hidden";
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollPosition}px`;
+    document.body.style.width = "100%";
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.body.style.position = previousPosition;
+      document.body.style.top = previousTop;
+      document.body.style.width = previousWidth;
+      window.scrollTo(0, scrollPosition);
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [selectedPoster]);
   const r = evaluate(c);
   const costs =
     fin.rent +
@@ -275,6 +331,12 @@ function App() {
     </div>
   );
   const nav = (x: string) => setTab(x);
+  const openPoster = (poster: Poster) => {
+    setPosterZoom(1);
+    setSelectedPoster(poster);
+  };
+  const changePosterZoom = (amount: number) =>
+    setPosterZoom((current) => Math.min(2.5, Math.max(0.75, current + amount)));
   const enterSimulator = () => {
     setC(example);
     setTab("simulador");
@@ -320,6 +382,7 @@ function App() {
             ["laboratorio", "LABORATORIO"],
             ["pruebas", "PRUEBAS"],
             ["proyecto", "PROYECTO"],
+            ["poster", "PÓSTER"],
           ].map(([id, label]) => (
             <button
               key={id}
@@ -916,11 +979,132 @@ function App() {
             </section>
           </>
         ) : null}
+        {tab === "poster" ? (
+          <>
+            <div className="section-heading poster-heading">
+              <div>
+                <div className="eyebrow">
+                  ISPC / MATEMÁTICA Y LÓGICA / GRUPO 22 · CTRL+E / 2026
+                </div>
+                <h2>
+                  PÓSTERES <span>ACADÉMICOS</span>
+                </h2>
+                <p>
+                  Explorá las dos presentaciones visuales del proyecto GYM
+                  Master. Seleccioná una imagen para ampliarla o descargarla.
+                </p>
+              </div>
+            </div>
+            <section className="poster-grid" aria-label="Pósteres académicos">
+              {posters.map((poster) => (
+                <article className="poster-card" key={poster.id}>
+                  <button
+                    className="poster-preview"
+                    onClick={() => openPoster(poster)}
+                    aria-label={`Ampliar ${poster.title}`}
+                  >
+                    <img src={poster.src} alt={poster.title} />
+                    <span>
+                      <Maximize2 size={20} /> AMPLIAR
+                    </span>
+                  </button>
+                  <div className="poster-card-content">
+                    <div className="panel-title">{poster.title}</div>
+                    <p>{poster.description}</p>
+                    <div className="poster-actions">
+                      <button
+                        className="outline"
+                        onClick={() => openPoster(poster)}
+                      >
+                        <Maximize2 size={17} /> VER PÓSTER
+                      </button>
+                      <a
+                        className="outline"
+                        href={poster.src}
+                        download={poster.filename}
+                      >
+                        <Download size={17} /> DESCARGAR
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </section>
+          </>
+        ) : null}
       </main>
       <footer>
         <strong>DESARROLLADO POR FTK LAB 🤍❤️🤍</strong>
         <small>ISPC · MATEMÁTICA Y LÓGICA · 2026</small>
       </footer>
+      {selectedPoster ? (
+        <div
+          className="poster-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Visor de ${selectedPoster.title}`}
+          onClick={(event) => {
+            if (event.target === event.currentTarget) setSelectedPoster(null);
+          }}
+        >
+          <div className="poster-modal-bar">
+            <div>
+              <div className="panel-title">{selectedPoster.title}</div>
+              <small>{Math.round(posterZoom * 100)} %</small>
+            </div>
+            <div className="poster-modal-controls">
+              <button
+                onClick={() => changePosterZoom(-0.25)}
+                disabled={posterZoom <= 0.75}
+                aria-label="Reducir zoom"
+                title="Reducir zoom"
+              >
+                <ZoomOut />
+              </button>
+              <button
+                onClick={() => setPosterZoom(1)}
+                disabled={posterZoom === 1}
+                aria-label="Restablecer zoom"
+                title="Restablecer zoom"
+              >
+                <RotateCcw />
+              </button>
+              <button
+                onClick={() => changePosterZoom(0.25)}
+                disabled={posterZoom >= 2.5}
+                aria-label="Ampliar zoom"
+                title="Ampliar zoom"
+              >
+                <ZoomIn />
+              </button>
+              <a
+                href={selectedPoster.src}
+                download={selectedPoster.filename}
+                aria-label="Descargar imagen original"
+                title="Descargar imagen original"
+              >
+                <Download />
+              </a>
+              <button
+                className="poster-modal-close"
+                onClick={() => setSelectedPoster(null)}
+                aria-label="Cerrar visor"
+                title="Cerrar visor"
+                autoFocus
+              >
+                <X />
+              </button>
+            </div>
+          </div>
+          <div className="poster-modal-stage">
+            <img
+              src={selectedPoster.src}
+              alt={selectedPoster.title}
+              style={{ height: `${posterZoom * 78}vh` }}
+            />
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }

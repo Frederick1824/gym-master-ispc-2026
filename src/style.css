@@ -654,6 +654,160 @@ th {
   color: #ed5964;
   font: 600 10px "IBM Plex Mono";
 }
+.poster-heading p {
+  max-width: 720px;
+  margin: 8px 0 0;
+  color: #b7b7bf;
+  line-height: 1.65;
+}
+.poster-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+.poster-card {
+  overflow: hidden;
+  border: 1px solid #34343b;
+  background: #18181c;
+}
+.poster-preview {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: min(62vh, 640px);
+  overflow: hidden;
+  padding: 20px;
+  border: 0;
+  border-bottom: 1px solid #34343b;
+  background: #0d0d10;
+}
+.poster-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.poster-preview > span {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 11px;
+  color: #fff;
+  background: #b91f2fdd;
+  font: 700 10px "IBM Plex Mono";
+  letter-spacing: 0.7px;
+  opacity: 0;
+  transform: translateY(5px);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+.poster-preview:hover > span,
+.poster-preview:focus-visible > span {
+  opacity: 1;
+  transform: translateY(0);
+}
+.poster-preview:focus-visible {
+  outline: 3px solid #ed2836;
+  outline-offset: -3px;
+}
+.poster-card-content {
+  padding: 22px;
+}
+.poster-card-content p {
+  min-height: 48px;
+  color: #b7b7bf;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.poster-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 18px;
+}
+.poster-actions .outline {
+  text-decoration: none;
+}
+.poster-modal {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  padding: 16px;
+  background: #050507f5;
+  backdrop-filter: blur(8px);
+}
+.poster-modal-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto 12px;
+  padding: 10px 12px 10px 16px;
+  border: 1px solid #3b3b43;
+  background: #17171be8;
+}
+.poster-modal-bar .panel-title {
+  margin: 0 0 4px;
+}
+.poster-modal-bar small {
+  color: #96969e;
+  font: 10px "IBM Plex Mono";
+}
+.poster-modal-controls {
+  display: flex;
+  gap: 6px;
+}
+.poster-modal-controls button,
+.poster-modal-controls a {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #474750;
+  color: #fff;
+  background: #25252b;
+}
+.poster-modal-controls button:hover,
+.poster-modal-controls a:hover {
+  border-color: #ed2836;
+  background: #8d1c29;
+}
+.poster-modal-controls button:focus-visible,
+.poster-modal-controls a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.poster-modal-controls svg {
+  width: 19px;
+}
+.poster-modal-controls .poster-modal-close {
+  margin-left: 5px;
+  border-color: #d92939;
+  background: #d92939;
+}
+.poster-modal-stage {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: #b51e2e #17171b;
+}
+.poster-modal-stage img {
+  flex: 0 0 auto;
+  display: block;
+  width: auto;
+  max-width: none;
+  object-fit: contain;
+}
 footer {
   display: flex;
   align-items: center;
@@ -715,6 +869,9 @@ footer small {
   .team-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  .poster-grid {
+    grid-template-columns: 1fr;
+  }
   .hero {
     min-height: 530px;
   }
@@ -745,6 +902,32 @@ footer small {
   .welcome-button {
     width: 100%;
     font-size: 12px;
+  }
+  .poster-preview {
+    height: min(58vh, 520px);
+    padding: 12px;
+  }
+  .poster-card-content {
+    padding: 18px;
+  }
+  .poster-card-content p {
+    min-height: 0;
+  }
+  .poster-modal {
+    padding: 8px;
+  }
+  .poster-modal-bar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+  }
+  .poster-modal-controls {
+    width: 100%;
+  }
+  .poster-modal-controls button,
+  .poster-modal-controls a {
+    flex: 1;
   }
   .project-intro,
   .team-heading {
