@@ -297,7 +297,9 @@ function App() {
             INGRESAR AL SIMULADOR <ArrowRight size={20} />
           </button>
         </div>
-        <small className="welcome-credit">ISPC · GRUPO 3 · 2026</small>
+        <small className="welcome-credit">
+          ISPC · GRUPO 22 · CTRL+E · 2026
+        </small>
       </main>
     );
   }
@@ -328,7 +330,7 @@ function App() {
             </button>
           ))}
         </nav>
-        <small>ISPC · GRUPO 3</small>
+        <small>ISPC · GRUPO 22 · CTRL+E</small>
       </header>
       <main>
         {tab === "inicio" ? (
@@ -879,7 +881,7 @@ function App() {
                   </div>
                   <div>
                     <dt>Grupo</dt>
-                    <dd>3 - Ctrl+e</dd>
+                    <dd>22 · Ctrl+E</dd>
                   </div>
                 </dl>
                 <div className="team-heading">
