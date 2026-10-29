@@ -1034,7 +1034,13 @@ function App() {
         ) : null}
       </main>
       <footer>
-        <strong>DESARROLLADO POR FTK LAB 🤍❤️🤍</strong>
+        <a
+          href="https://frederick1824.vercel.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <strong>DESARROLLADO POR FTK LAB 🤍❤️🤍</strong>
+        </a>
         <small>ISPC · MATEMÁTICA Y LÓGICA · 2026</small>
       </footer>
       {selectedPoster ? (
